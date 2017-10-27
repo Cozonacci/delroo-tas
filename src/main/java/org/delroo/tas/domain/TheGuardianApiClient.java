@@ -20,12 +20,22 @@ public class TheGuardianApiClient extends ApiAdapter {
         requestParams.put("q", content);
         requestParams.put("show-fields", "body");
 
+        return retrieveResult("/search");
+    }
+
+    public SearchContentResponse searchSections(String section) {
+        requestParams.put("q", section);
+
+        return retrieveResult("/sections");
+    }
+
+    private SearchContentResponse retrieveResult(final String path) {
         return requestSpecification
 
                 .log().all()
                 .with().params(requestParams)
 
-                .when().get("/search")
+                .when().get(path)
 
                 .then().log().all()
                 .and().assertThat().statusCode(200)

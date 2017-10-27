@@ -1,5 +1,5 @@
 @WIP
-Feature: Search by Content
+Feature: Search Content
 
   As a TheGuardian API user
   I want to search items by content

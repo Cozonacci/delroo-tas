@@ -5,6 +5,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.delroo.tas.domain.TheGuardianApiClient;
 import org.delroo.tas.domain.model.SearchContentResponse;
+import org.delroo.tas.domain.model.WebPage;
+
+import java.util.function.Predicate;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
@@ -25,13 +28,27 @@ public class SearchByContentStepDefs {
         searchContentResponse = client.searchContent(content);
     }
 
+    @When("^(?:he|user) searches available '(.*)' sections$")
+    public void userSearchesAvailableSections(final String section) {
+        searchContentResponse = client.searchSections(section);
+    }
+
     @Then("^(?:he|user) receives all the items with '(.*)' content$")
     public void userReceivesAllTheItemsWithCarContent(final String content) {
+        checkResultMatchesQuery(content, (webPage) -> webPage.contentRelatesTo(content));
+    }
+
+    @Then("^(?:he|user) receives all sections related to '(.*)'$")
+    public void userReceivesAllSectionsRelatedToSection(final String section) {
+        checkResultMatchesQuery(section, (webPage) -> webPage.sectionRelatesTo(section));
+    }
+
+    private void checkResultMatchesQuery(String query, Predicate<WebPage> validation) {
         ensureResponseHasContentAvailable();
         final boolean[] result = {true};
         searchContentResponse.getResponse().getResults().forEach(item ->
-                result[0] = item.relatesTo(content) && result[0]);
-        assertTrue("Returned items do NOT relate to content: " + content, result[0]);
+                result[0] = validation.test(item) && result[0]);
+        assertTrue("Not all returned items relate to search query: " + query, result[0]);
     }
 
     private void ensureResponseHasContentAvailable() {

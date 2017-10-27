@@ -12,7 +12,7 @@ public class Response {
     private Integer currentPage;
     private Integer pages;
     private String orderBy;
-    private List<WebResource> results;
+    private List<WebPage> results;
 
     public String getStatus() {
         return status;
@@ -78,11 +78,11 @@ public class Response {
         this.orderBy = orderBy;
     }
 
-    public List<WebResource> getResults() {
+    public List<WebPage> getResults() {
         return results;
     }
 
-    public void setResults(List<WebResource> results) {
+    public void setResults(List<WebPage> results) {
         this.results = results;
     }
 
