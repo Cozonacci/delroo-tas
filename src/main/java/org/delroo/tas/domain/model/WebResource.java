@@ -1,7 +1,11 @@
 package org.delroo.tas.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.stream.Stream;
+
+import static org.delroo.tas.util.ContentValidator.containsIgnoreCases;
+import static org.delroo.tas.util.ContentValidator.evaluateExpression;
+import static org.delroo.tas.util.StringUtils.getHtmlText;
+import static org.delroo.tas.util.StringUtils.getUniqueWords;
 
 public class WebResource {
 
@@ -13,6 +17,7 @@ public class WebResource {
     private String webTitle;
     private String webUrl;
     private String apiUrl;
+    private Fields fields;
     private boolean isHosted;
 
     public String getId() {
@@ -79,6 +84,14 @@ public class WebResource {
         this.apiUrl = apiUrl;
     }
 
+    public Fields getFields() {
+        return fields;
+    }
+
+    public void setFields(Fields fields) {
+        this.fields = fields;
+    }
+
     public boolean isHosted() {
         return isHosted;
     }
@@ -87,10 +100,12 @@ public class WebResource {
         isHosted = hosted;
     }
 
-    public boolean relatesTo(String content) {
-        // Assumption: id, sectionId, sectionName, webTitle, webUrl or apiUrl should have some content specific info
-        return Stream.of(this.id, this.sectionId, this.sectionName, this.webTitle, this.webUrl, this.apiUrl)
-                .anyMatch(item -> item.contains(content));
+    public boolean relatesTo(String contentQuery) {
+        final String simplifiedContent = getUniqueWords(getHtmlText(fields.getBody())).toString();
+        boolean result = evaluateExpression(containsIgnoreCases(simplifiedContent), contentQuery);
+        System.out.println(String.format("Checking that resource [%s] content matches query [%s]: %s",
+                id, contentQuery, result));
+        return result;
     }
 
 }

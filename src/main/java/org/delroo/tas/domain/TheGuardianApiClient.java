@@ -18,6 +18,7 @@ public class TheGuardianApiClient extends ApiAdapter {
 
     public SearchContentResponse searchContent(String content) {
         requestParams.put("q", content);
+        requestParams.put("show-fields", "body");
 
         return requestSpecification
 

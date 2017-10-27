@@ -6,9 +6,9 @@ import cucumber.api.java.en.When;
 import org.delroo.tas.domain.TheGuardianApiClient;
 import org.delroo.tas.domain.model.SearchContentResponse;
 
+import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.delroo.tas.util.ListUtils.isNullOrEmpty;
-import static org.junit.Assert.assertTrue;
 
 public class SearchByContentStepDefs {
 
@@ -28,9 +28,10 @@ public class SearchByContentStepDefs {
     @Then("^(?:he|user) receives all the items with '(.*)' content$")
     public void userReceivesAllTheItemsWithCarContent(final String content) {
         ensureResponseHasContentAvailable();
+        final boolean[] result = {true};
         searchContentResponse.getResponse().getResults().forEach(item ->
-                assertTrue("Returned item does NOT relate to content: " + content, item.relatesTo(content))
-        );
+                result[0] = item.relatesTo(content) && result[0]);
+        assertTrue("Returned items do NOT relate to content: " + content, result[0]);
     }
 
     private void ensureResponseHasContentAvailable() {

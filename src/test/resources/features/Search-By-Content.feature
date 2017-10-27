@@ -5,12 +5,12 @@ Feature: Search by Content
   I want to search items by content
   So that I can find quickly relevant information
 
-  Scenario Outline: Search items by content
+  Scenario: Search items by content
     Given John has access to TheGuardian API app
-    When he searches items with '<search content>' content
-    Then he receives all the items with '<search content>' content
+    When he searches items with 'cars' content
+    Then he receives all the items with 'cars' content
 
-    Examples:
-      | search content |
-      | cars           |
-      | football       |
+  Scenario: Search items using complex queries
+    Given John has access to TheGuardian API app
+    When he searches items with 'sausages AND (mash OR chips) AND NOT (unpleasant OR sadly)' content
+    Then he receives all the items with 'sausages AND (mash OR chips) AND NOT (unpleasant OR sadly)' content
