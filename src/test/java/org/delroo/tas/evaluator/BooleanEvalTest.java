@@ -1,4 +1,4 @@
-package org.delroo.tas.util;
+package org.delroo.tas.evaluator;
 
 import org.junit.Test;
 

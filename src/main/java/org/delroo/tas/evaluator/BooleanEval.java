@@ -1,4 +1,4 @@
-package org.delroo.tas.util;
+package org.delroo.tas.evaluator;
 
 import com.fathzer.soft.javaluator.AbstractEvaluator;
 import com.fathzer.soft.javaluator.BracketPair;
@@ -12,15 +12,15 @@ import java.util.function.Predicate;
 public class BooleanEval extends AbstractEvaluator<String> {
 
     private final static Operator NOT =
-            new Operator("NOT", 1, Operator.Associativity.RIGHT, 1);
+            new BooleanOperator("NOT", 1, Operator.Associativity.RIGHT, 1, (a, b) -> !a);
     private final static Operator OR =
-            new Operator("OR", 2, Operator.Associativity.LEFT, 2);
+            new BooleanOperator("OR", 2, Operator.Associativity.LEFT, 2, (a, b) -> a || b);
     private final static Operator AND =
-            new Operator("AND", 2, Operator.Associativity.LEFT, 3);
+            new BooleanOperator("AND", 2, Operator.Associativity.LEFT, 3, (a, b) -> a && b);
     private final static Operator OR_NOT =
-            new Operator("OR NOT", 2, Operator.Associativity.LEFT, 2);
+            new BooleanOperator("OR NOT", 2, Operator.Associativity.LEFT, 2, (a, b) -> a || !b);
     private final static Operator AND_NOT =
-            new Operator("AND NOT", 2, Operator.Associativity.LEFT, 3);
+            new BooleanOperator("AND NOT", 2, Operator.Associativity.LEFT, 3, (a, b) -> a && !b);
 
     private static final Parameters PARAMETERS;
 
@@ -51,21 +51,9 @@ public class BooleanEval extends AbstractEvaluator<String> {
     @Override
     protected String evaluate(Operator operator, Iterator<String> operands, Object evaluationContext) {
         List<String> tree = (List<String>) evaluationContext;
-        String o1 = operands.next();
-        Boolean result;
-        if (operator == OR) {
-            result = getValue(o1) || getValue(operands.next());
-        } else if (operator == AND) {
-            result = getValue(o1) && getValue(operands.next());
-        } else if (operator == AND_NOT) {
-            result = getValue(o1) && !getValue(operands.next());
-        } else if (operator == OR_NOT) {
-            result = getValue(o1) || !getValue(operands.next());
-        } else if (operator == NOT) {
-            result = !getValue(o1);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        BooleanOperator booleanOperator = ((BooleanOperator) operator);
+        Boolean result = booleanOperator.isSingleOperand() ? booleanOperator.getAppliance().test(getValue(operands.next()), null) :
+                booleanOperator.getAppliance().test(getValue(operands.next()), getValue(operands.next()));
         String eval = String.valueOf(result);
         tree.add(eval);
         return eval;
