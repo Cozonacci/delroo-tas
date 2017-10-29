@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.delroo.tas.util.StringUtils.getHtmlText;
 import static org.delroo.tas.util.StringUtils.getUniqueWords;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertTrue;
 
 public class StringUtilsTest {
 
@@ -31,5 +32,13 @@ public class StringUtilsTest {
     public void shouldRemoveFirstAndLastChars() {
         MatcherAssert.assertThat(StringUtils.innerValue("abc"), is("b"));
         MatcherAssert.assertThat(StringUtils.innerValue("a"), is("a"));
+    }
+
+    @Test
+    public void shouldEvaluateIgnoringCase() {
+        String content = "Apple CheRry pie";
+        String query = "cherry pie";
+
+        assertTrue(StringUtils.containsIgnoreCases(content, query));
     }
 }

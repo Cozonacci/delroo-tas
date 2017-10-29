@@ -3,11 +3,6 @@ package org.delroo.tas.domain.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.delroo.tas.util.ContentValidator.containsIgnoreCases;
-import static org.delroo.tas.util.ContentValidator.evaluateExpression;
-import static org.delroo.tas.util.StringUtils.getHtmlText;
-import static org.delroo.tas.util.StringUtils.getUniqueWords;
-
 public class WebPage extends WebResource {
 
     private String type;
@@ -73,20 +68,4 @@ public class WebPage extends WebResource {
     public void setEditions(List<Edition> editions) {
         this.editions = editions;
     }
-
-    public boolean sectionRelatesTo(String query) {
-        boolean result = containsIgnoreCases(getId()).test(query);
-        System.out.println(String.format("Checking that resource [%s] section matches query [%s]: %s",
-                getId(), query, result));
-        return result;
-    }
-
-    public boolean contentRelatesTo(String query) {
-        final String simplifiedContent = getUniqueWords(getHtmlText(fields.getBody())).toString();
-        boolean result = evaluateExpression(containsIgnoreCases(simplifiedContent), query);
-        System.out.println(String.format("Checking that resource [%s] content matches query [%s]: %s",
-                getId(), query, result));
-        return result;
-    }
-
 }

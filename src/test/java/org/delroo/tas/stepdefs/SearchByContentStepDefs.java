@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
+import static org.delroo.tas.util.ContentValidator.contentRelatesTo;
 import static org.delroo.tas.util.ListUtils.isNullOrEmpty;
 
 public class SearchByContentStepDefs {
@@ -35,12 +36,12 @@ public class SearchByContentStepDefs {
 
     @Then("^(?:he|user) receives all the items with '(.*)' content$")
     public void userReceivesAllTheItemsWithCarContent(final String content) {
-        checkResultMatchesQuery(content, (webPage) -> webPage.contentRelatesTo(content));
+        checkResultMatchesQuery(content, (webPage) -> contentRelatesTo(webPage.getFields().getBody(), content));
     }
 
     @Then("^(?:he|user) receives all sections related to '(.*)'$")
     public void userReceivesAllSectionsRelatedToSection(final String section) {
-        checkResultMatchesQuery(section, (webPage) -> webPage.sectionRelatesTo(section));
+        checkResultMatchesQuery(section, (webPage) -> contentRelatesTo(webPage.getId(), section));
     }
 
     private void checkResultMatchesQuery(String query, Predicate<WebPage> validation) {
