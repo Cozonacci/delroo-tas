@@ -20,4 +20,13 @@ public final class StringUtils {
         Document doc = Jsoup.parse(input);
         return doc.body().text();
     }
+
+    public static String innerValue(final String input) {
+        if (input == null || input.length() <= 1) return input;
+        return input.substring(1, input.length() - 1);
+    }
+
+    public static boolean isNullOrEmpty(final String input) {
+        return (input == null) || input.isEmpty();
+    }
 }

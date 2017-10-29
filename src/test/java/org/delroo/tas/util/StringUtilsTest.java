@@ -26,4 +26,10 @@ public class StringUtilsTest {
                         "chopped, chives, hard, stock, 650ml, or, 125g, polenta, 50g, fry, coat, 4, Extra, 3tbsp, " +
                         "to, parmesan]"));
     }
+
+    @Test
+    public void shouldRemoveFirstAndLastChars() {
+        MatcherAssert.assertThat(StringUtils.innerValue("abc"), is("b"));
+        MatcherAssert.assertThat(StringUtils.innerValue("a"), is("a"));
+    }
 }
