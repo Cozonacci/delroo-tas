@@ -21,7 +21,7 @@ public class SearchByContentStepDefs {
 
     @Given("^John has access to TheGuardian API app$")
     public void userHasAccessToTheGuardianAPIApp() {
-        client = new TheGuardianApiClient("test");
+        client = new TheGuardianApiClient();
     }
 
     @When("^(?:he|user) searches items with '(.*)' content$")

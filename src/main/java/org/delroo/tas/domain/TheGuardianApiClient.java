@@ -2,35 +2,40 @@ package org.delroo.tas.domain;
 
 import com.jayway.restassured.http.ContentType;
 import org.delroo.tas.domain.model.SearchContentResponse;
+import org.delroo.tas.generic.ApiAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TheGuardianApiClient extends ApiAdapter {
+public class TheGuardianApiClient extends ApiAdapter<TheGuardianConfig> {
 
-    private final String apiKey;
     private Map<String, Object> requestParams = new HashMap<>();
 
+    public TheGuardianApiClient() {
+        super(TheGuardianConfig.fromConfig());
+    }
+
     public TheGuardianApiClient(final String apiKey) {
-        this.apiKey = apiKey;
-        requestParams.put("api-key", apiKey);
+        super(TheGuardianConfig.fromConfig().withApiKey(apiKey));
     }
 
     public SearchContentResponse searchContent(String content) {
         requestParams.put("q", content);
         requestParams.put("show-fields", "body");
+        requestParams.put("api-key", getResourceSpec().getApiKey());
 
-        return retrieveResult("/search");
+        return retrieveResult(getResourceSpec().getPaths().get("searchContent").toString());
     }
 
     public SearchContentResponse searchSections(String section) {
         requestParams.put("q", section);
+        requestParams.put("api-key", getResourceSpec().getApiKey());
 
-        return retrieveResult("/sections");
+        return retrieveResult(getResourceSpec().getPaths().get("searchSections").toString());
     }
 
     private SearchContentResponse retrieveResult(final String path) {
-        return requestSpecification
+        return requestSpec
 
                 .log().all()
                 .with().params(requestParams)
