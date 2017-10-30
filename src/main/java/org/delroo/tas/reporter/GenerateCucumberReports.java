@@ -8,25 +8,24 @@ import java.util.List;
 
 public class GenerateCucumberReports {
 
-    private static final String CUCUMBER_REPORTS_FOLDER = "target/cucumber-parallel";
-
     public static void main(String[] args) {
-        ReportingArtifacts artifacts = new ReportingArtifacts(CUCUMBER_REPORTS_FOLDER);
+        ReportDetails details = ReportDetails.fromConfig();
+        ReportingArtifacts artifacts = new ReportingArtifacts(details.getSourceFolder());
         artifacts.reduceDuplicatedFeature();
         artifacts.moveScenariosIntoParentFeature();
-        generateSampleReport(artifacts.getArtifacts());
+        generateSampleReport(artifacts.getArtifacts(), details);
     }
 
-    private static void generateSampleReport(final List<String> jsonFiles) {
-        File reportOutputDirectory = new File("target");
+    private static void generateSampleReport(final List<String> jsonFiles, ReportDetails details) {
+        File reportOutputDirectory = new File(details.getOutputFolder());
 
         Configuration configuration = new Configuration(reportOutputDirectory, "DelRoo TAS");
-        configuration.setParallelTesting(false);
-        configuration.setRunWithJenkins(false);
-        configuration.setBuildNumber("1");
-        configuration.addClassifications("Platform", "Windows");
-        configuration.addClassifications("Browser", "Firefox");
-        configuration.addClassifications("Branch", "release/1.0");
+        configuration.setParallelTesting(details.getBuild().isParallel());
+        configuration.setRunWithJenkins(details.getBuild().isJenkins());
+        configuration.setBuildNumber(String.valueOf(details.getBuild().getNumber()));
+        configuration.addClassifications("Platform", details.getBuild().getPlatform());
+        configuration.addClassifications("Browser", details.getBuild().getBrowser());
+        configuration.addClassifications("Branch", details.getBuild().getBranch());
 
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
         reportBuilder.generateReports();
