@@ -1,5 +1,7 @@
 package org.delroo.tas.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.delroo.tas.query.Query;
 import org.delroo.tas.query.QueryFactory;
 import org.delroo.tas.evaluator.BooleanEval;
@@ -10,6 +12,8 @@ import java.util.function.Predicate;
 import static org.delroo.tas.util.StringUtils.*;
 
 public final class ContentValidator {
+
+    private final static Logger logger = LogManager.getLogger(ContentValidator.class);
 
     private ContentValidator() {
     }
@@ -44,7 +48,7 @@ public final class ContentValidator {
 
     public static boolean ensureTextMatch(String content, Query query) {
         boolean result = containsIgnoreCases(content, query.getValue());
-        System.out.println(String.format("%S: Content [%s] matches %s", result, content, query));
+        logger.info(String.format("%S: Content [%s] matches %s", result, content, query));
         return result;
     }
 
@@ -56,7 +60,7 @@ public final class ContentValidator {
     public static boolean ensureExpressionMatch(String content, Query query) {
         final String simplifiedContent = getUniqueWords(getHtmlText(content)).toString();
         boolean result = evaluateExpression(Predicates.containsIgnoreCases(simplifiedContent), query.getValue());
-        System.out.println(String.format("%S: Content [%s] matches %s", result, content, query));
+        logger.info(String.format("%S: Content [%s] matches %s", result, content, query));
         return result;
     }
 }

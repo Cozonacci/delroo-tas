@@ -1,5 +1,7 @@
 package org.delroo.tas.evaluator;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,12 +11,14 @@ import static org.junit.Assert.assertTrue;
 
 public class BooleanEvalTest {
 
+    private final static Logger logger = LogManager.getLogger(BooleanEvalTest.class);
+
     private static String content = "sausages saveloy";
     private static BooleanEval evaluator = new BooleanEval(content::contains);
 
     private static boolean evaluate(String expression) {
         boolean result = Boolean.valueOf(evaluator.evaluate(expression, new ArrayList<>()));
-        System.out.println(String.format("Evaluate expression: [%s] contains [%s] = %s", content, expression, result));
+        logger.info(String.format("Evaluate expression: [%s] contains [%s] = %s", content, expression, result));
         return result;
     }
 
