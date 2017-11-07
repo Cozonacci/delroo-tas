@@ -44,5 +44,11 @@ NOTE: Ensure the following plugins are installed:
 3. in Jenkins web app go to *Manage Jenkins -> Reload Configuration from Disk*, then Confirm. This should pick up the new job.
 4. on the job list, there should be now a new job called delroo-tas, open it and click on *Build Now*
 
+### Project configuration
+Support for external configurations is implemented using [TypeSafe Config][https://github.com/lightbend/config]
+This approach allows simple config parsing, tree models as well as config bean factory, e.g. *TheGuardianConfig.java*
+
+To provide a custom api-key just call the execution with an additional param -DPROVIDED_API_KEY=custom-api-key
+
 ### Improvements
 - Implement generic filters for each API endpoint, e.g. searchXYZ(withFilters(A, B, C))
