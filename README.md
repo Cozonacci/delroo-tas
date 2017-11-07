@@ -24,6 +24,10 @@ This will execute unit and acceptance tests.
 To generate cucumber reports run *mvn exec:java* inside the project root folder.
 Reports home page can be found by loading *delroo-tas/target/cucumber-html-reports/overview-features.html*
 
+The acceptance tests are configured to be executed in parallel. This is implemented using *cucumber-jvm-parallel-plugin*
+and *maven-failsafe-plugin*. The reporting module will handle duplicated file reports only if executed after test run 
+(GenerateCucumberReports.main() or mvn exec:java)  
+
 ### CI/CD
 For the CI/CD pipeline we need to ensure different validation phases. Eventually the unit tests and mock profiles will
 be checked at PR/integration phase while the E2E will be executed at the acceptance level.
