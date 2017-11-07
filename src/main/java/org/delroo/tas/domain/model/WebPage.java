@@ -11,6 +11,8 @@ public class WebPage extends WebResource {
     private LocalDateTime webPublicationDate;
     private Fields fields;
     private boolean isHosted;
+    private String pillarId;
+    private String pillarName;
     private List<Edition> editions;
 
     public String getType() {
@@ -59,6 +61,22 @@ public class WebPage extends WebResource {
 
     public void setIsHosted(boolean hosted) {
         isHosted = hosted;
+    }
+
+    public String getPillarId() {
+        return pillarId;
+    }
+
+    public void setPillarId(String pillarId) {
+        this.pillarId = pillarId;
+    }
+
+    public String getPillarName() {
+        return pillarName;
+    }
+
+    public void setPillarName(String pillarName) {
+        this.pillarName = pillarName;
     }
 
     public List<Edition> getEditions() {
